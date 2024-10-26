@@ -30,7 +30,7 @@ function UsageTrack() {
     const result: HISTORY[] = await db
       .select()
       .from(AIOutput)
-
+      //@ts-ignore
       .where(eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress));
 
     GetTotalUsage(result);
