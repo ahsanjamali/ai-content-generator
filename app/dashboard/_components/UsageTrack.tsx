@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { db } from "@/utils/db";
-import { AIOutput } from "@/utils/schema";
+import { AIOutput, AIOutputType } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import React, { useContext, useEffect, useState } from "react";
@@ -32,8 +32,8 @@ function UsageTrack() {
     if (!emailAddress) {
       return <div>Error: User not found.</div>;
     }
-    //@ts-ignore
-    const result: HISTORY[] = await db
+
+    const result: AIOutputType[] = await db
       .select()
       .from(AIOutput)
       .where(eq(AIOutput.createdBy, emailAddress));
@@ -41,7 +41,7 @@ function UsageTrack() {
     GetTotalUsage(result);
   };
 
-  const GetTotalUsage = (result: HISTORY[]) => {
+  const GetTotalUsage = (result: AIOutputType[]) => {
     let total: number = 0;
     result.forEach((element) => {
       total = total + Number(element.aiResponse?.length);

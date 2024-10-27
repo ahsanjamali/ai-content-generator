@@ -8,3 +8,5 @@ export const AIOutput = pgTable("aiOutput", {
   createdBy: varchar("createdBy"),
   createdAt: varchar("createdAt"),
 });
+
+export type AIOutputType = typeof AIOutput.$inferSelect;

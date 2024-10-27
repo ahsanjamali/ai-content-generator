@@ -2,7 +2,7 @@ import React from "react";
 import Templates from "@/app/(data)/Templates";
 import { Button } from "@/components/ui/button";
 import { db } from "@/utils/db";
-import { AIOutput } from "@/utils/schema";
+import { AIOutput, AIOutputType } from "@/utils/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
@@ -26,9 +26,8 @@ async function history() {
   }
   // Fetch history list with error handling
 
-  let HistoryList: HISTORY[] = [];
+  let HistoryList: AIOutputType[] = [];
   try {
-    // @ts-ignore
     HistoryList = await db
       .select()
       .from(AIOutput)
@@ -64,7 +63,7 @@ async function history() {
       {HistoryList.length === 0 ? (
         <p>No history found.</p>
       ) : (
-        HistoryList.map((item: HISTORY, index: number) => (
+        HistoryList.map((item: AIOutputType, index: number) => (
           <div className="grid grid-cols-7 my-5 py-3 px-3" key={index}>
             <h2 className="col-span-2 flex gap-2 items-center">
               {/* Ensure src is valid and provide fallback */}
