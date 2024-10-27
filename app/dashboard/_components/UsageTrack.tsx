@@ -9,6 +9,7 @@ import { HISTORY } from "../history/page";
 import { TotalUsageContext } from "@/app/(context)/TotalUsageContext";
 import { UpdateCreditUsageContext } from "@/app/(context)/UpdateCreditUsageContext";
 import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server";
 
 function UsageTrack() {
   const { user } = useUser();
@@ -26,12 +27,16 @@ function UsageTrack() {
   }, [updateCreditUsage && user]);
 
   const GetData = async () => {
-    // @ts-ignore
+    const emailAddress = user?.primaryEmailAddress?.emailAddress;
+
+    if (!emailAddress) {
+      return <div>Error: User not found.</div>;
+    }
+    //@ts-ignore
     const result: HISTORY[] = await db
       .select()
       .from(AIOutput)
-      //@ts-ignore
-      .where(eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress));
+      .where(eq(AIOutput.createdBy, emailAddress));
 
     GetTotalUsage(result);
   };
